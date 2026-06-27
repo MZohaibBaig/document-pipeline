@@ -10,6 +10,10 @@ def process_document(task_id: int, content: str):
     db = SessionLocal()
     try:
         task = db.query(DocumentTask).filter(DocumentTask.id == task_id).first()
+        if not task:
+            db.close()
+            return
+
         task.status = "processing"
         db.commit()
 
@@ -39,8 +43,9 @@ def process_document(task_id: int, content: str):
         db.commit()
 
     except Exception as e:
-        task.status = "failed"
-        task.error_message = str(e)
-        db.commit()
+        if task:
+            task.status = "failed"
+            task.error_message = str(e)
+            db.commit()
     finally:
         db.close()
