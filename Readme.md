@@ -10,6 +10,25 @@ An async document processing API built with FastAPI, Celery, Redis, and PostgreS
 - Real-time task status tracking
 - Text analysis: word count, sentence count, reading time, top words
 
+## Architecture
+
+```
+User uploads document
+        ↓
+FastAPI saves task to PostgreSQL (status: pending)
+        ↓
+FastAPI sends task ID to Redis queue
+        ↓
+FastAPI returns task_id immediately to user
+        ↓
+Celery worker picks up task from Redis
+        ↓
+Celery processes document (word count, reading time, top words)
+        ↓
+Celery updates PostgreSQL (status: completed + results)
+        ↓
+User polls GET /tasks/{id} to retrieve results
+
 ## Tech Stack
 
 - Python, FastAPI, Uvicorn
@@ -41,3 +60,4 @@ An async document processing API built with FastAPI, Celery, Redis, and PostgreS
 ## How It Works
 
 User uploads a document → API saves task as "pending" and returns task_id immediately → Celery picks up the task from Redis → Processes the document in background → Updates task status to "completed" with results → User polls the status endpoint to retrieve results
+```
