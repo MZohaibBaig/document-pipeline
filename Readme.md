@@ -1,6 +1,6 @@
 # Document Processing Pipeline
 
-An async document processing API built with FastAPI, Celery, Redis, and PostgreSQL.
+Built a document processing pipeline that accepts user uploads, stores processing tasks in a database, executes analysis asynchronously using Celery and Redis, and exposes task status and results through a FastAPI backend. The project includes JWT authentication, Docker-based deployment, and persistent task tracking, demonstrating practical experience with distributed backend systems.
 
 ## Features
 
